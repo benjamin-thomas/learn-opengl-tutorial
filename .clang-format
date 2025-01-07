@@ -1,0 +1,9 @@
+# DisableFormat: true
+
+# https://zed0.co.uk/clang-format-configurator/
+
+BasedOnStyle: Google
+ReflowComments: false
+
+# Make closer to CLion's default formatter
+IndentWidth: 4

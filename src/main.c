@@ -1,12 +1,18 @@
+// clang-format off
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+// clang-format on
 #include <stdio.h>
 
-void on_window_resize(GLFWwindow *, const int width, const int height) {
+// ReSharper disable once CppParameterNeverUsed
+void on_window_resize(GLFWwindow *_window, const int width, const int height) {
     glViewport(0, 0, width, height);
 }
 
 void handle_key_press(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_CAPS_LOCK) == GLFW_PRESS) {
+    const int escape = glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+    const int caps_lock = glfwGetKey(window, GLFW_KEY_CAPS_LOCK) == GLFW_PRESS;
+    if (escape || caps_lock) {
         glfwSetWindowShouldClose(window, 1);
     }
 }
@@ -23,7 +29,7 @@ int main(void) {
     /*
       To find the latest openGL version supported by your hardware, run:
          glxinfo | fgrep 'core profile version'
-  
+
       We use v3.3 for this tutorial
     */
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -36,6 +42,10 @@ int main(void) {
      */
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
     GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
     if (!window) {
         printf("Could not create a GLFW window\n");
@@ -44,9 +54,26 @@ int main(void) {
     }
     glfwMakeContextCurrent(window);
 
-    glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(window, on_window_resize);
     // glfwSetKeyCallback(window, key_callback);
+
+    // ReSharper disable once CppRedundantCastExpression
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        printf("Failed to initialize GLAD\n");
+        return 1;
+    }
+    glViewport(0, 0, 800, 600);
+
+    // clang-format off
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f,
+    };
+    // clang-format on
+
+    unsigned int vbo;
+    glGenBuffers(1, &vbo);
 
     while (!glfwWindowShouldClose(window)) {
         handle_key_press(window);

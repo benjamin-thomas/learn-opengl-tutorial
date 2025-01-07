@@ -1,21 +1,29 @@
-cmake_minimum_required(VERSION 3.30)
-project(learn_opengl_tutorial C)
-
+cmake_minimum_required(VERSION 3.28)
 set(CMAKE_C_STANDARD 11)
 
-include_directories(
-        ${PROJECT_SOURCE_DIR}/src
-        ${PROJECT_SOURCE_DIR}/include
+project(learn_opengl_tutorial C)
+set(target_name "learn_opengl_tutorial")
+add_executable(${target_name} src/main.c)
+
+
+include(FetchContent)
+
+FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw
+        GIT_TAG "master"
+        GIT_SHALLOW 1
 )
 
-#[[
+FetchContent_MakeAvailable(glfw)
 
-For Linux users compiling with GCC, the following command line options may help you compile the project:
- 
- -lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl. 
- 
-Not correctly linking the corresponding libraries will generate many undefined reference errors.
-]]
+FetchContent_Declare(
+        glad
+        GIT_REPOSITORY https://github.com/Sunday111/glad
+        GIT_TAG "main"
+        GIT_SHALLOW 1
+)
 
-add_executable(learn_opengl_tutorial src/glad.c src/main.c)
-target_link_libraries(learn_opengl_tutorial glfw GL X11 pthread Xrandr Xi dl)
+FetchContent_MakeAvailable(glad)
+
+target_link_libraries(${target_name} PUBLIC glfw glad)

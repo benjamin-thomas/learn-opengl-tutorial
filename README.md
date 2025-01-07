@@ -1,19 +1,12 @@
+# learn-opengl-tutorial
+
+Following along: https://learnopengl.com/Getting-started/Hello-Triangle
+
 ## Setup
 
-```sh
-apt install libglfw3-dev libglfw3-doc
-```
+This post was really useful to get the project setup:
 
-This means I'll be able to link against `libglfw` (not `libglfw3`!).
+https://www.reddit.com/r/opengl/comments/1hu7ti3/minimal_opengl_project_setup_in_vs_code_on_windows/
 
-```
-root@computer:~# dpkg -L libglfw3-dev | fgrep .so
-/usr/lib/x86_64-linux-gnu/libglfw.so
-```
-
-Then go to: https://gen.glad.sh/
-
-- select gl v3.3
-- compatibility set to "core" (on the right)
-- select the "loader" checkbox (in the "options" section)
-- click the "generate" button
+Now, just use CLion or vscode and and with the right extension, everything works
+to be productive and is self-contained.
