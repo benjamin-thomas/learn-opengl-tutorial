@@ -6,7 +6,7 @@
 
 
 /*
-Try to draw 2 triangles next to each other using glDrawArrays by adding more vertices to your data.
+Same as ex2.c, but uses an array of VAOs and VBOs, rather than 2 distinct VAOs and VBOs
  */
 
 const char *vertex_shader_source =
@@ -66,7 +66,7 @@ int main(void) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Hello Triangle: ex1", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Hello Triangle: ex2b", NULL, NULL);
     if (!window) {
         printf("Could not create a GLFW window\n");
         glfwTerminate();
@@ -96,8 +96,7 @@ int main(void) {
     }
 
     // Build the vertex shader
-    const unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    {
+    const unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER); {
         glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
         glCompileShader(vertex_shader);
 
@@ -111,8 +110,7 @@ int main(void) {
     }
 
     // Build the fragment shader
-    const unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    {
+    const unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER); {
         glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
         glCompileShader(fragment_shader);
 
@@ -126,8 +124,7 @@ int main(void) {
     }
 
     // Build the shader program
-    const unsigned int shader_program = glCreateProgram();
-    {
+    const unsigned int shader_program = glCreateProgram(); {
         glAttachShader(shader_program, vertex_shader);
         glAttachShader(shader_program, fragment_shader);
         glLinkProgram(shader_program);
@@ -142,35 +139,33 @@ int main(void) {
         glDeleteShader(fragment_shader);
     }
 
-    // clang-format off
-    const float vertices[] = {
-        -0.45f, 0.5f, 0.0f, // t
-        -0.8f, -0.5f, 0.0f, // bl
-        -0.1f, -0.5f, 0.0f, // br
-        
-         0.45f,  0.5f, 0.0f, // t
-         0.8f, -0.5f, 0.0f,  // br
-         0.1f, -0.5f, 0.0f,  // bl
+#define TRIANGLES_CNT 2
+    const float vertices[TRIANGLES_CNT][9] = {
+        {
+            -0.45f, 0.5f, 0.0f, // t
+            -0.8f, -0.5f, 0.0f, // bl
+            -0.1f, -0.5f, 0.0f, // br
+        },
+        {
+            0.45f, 0.5f, 0.0f, // t
+            0.8f, -0.5f, 0.0f, // br
+            0.1f, -0.5f, 0.0f, // bl
+        },
     };
-    // clang-format on
 
-    // 0. create the required buffers
-    unsigned int vao, vbo;
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
+    // Create the buffers
+    unsigned int vao_arr[TRIANGLES_CNT], vbo_arr[TRIANGLES_CNT];
+    glGenVertexArrays(TRIANGLES_CNT, vao_arr);
+    glGenBuffers(TRIANGLES_CNT, vbo_arr);
 
-    // 1. bind the buffers
-    glBindVertexArray(vao);
-    // 2. copy the vertices into the VBO
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // 3. set the vertex attributes pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-
-    // Finalize the VAO setup (I think)
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    // Use the buffers
+    for (int i = 0; i < TRIANGLES_CNT; i++) {
+        glBindVertexArray(vao_arr[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_arr[i]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[i]), vertices[i], GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
+        glEnableVertexAttribArray(0);
+    }
 
     while (!glfwWindowShouldClose(window)) {
         handle_key_press(window);
@@ -181,17 +176,19 @@ int main(void) {
 
         // Use the linked program
         glUseProgram(shader_program);
-        glBindVertexArray(vao);
 
-        // We divide by 3 since each vertex position is defined via 3 values (x,y,z)
-        glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(float) / 3);
+        for (int i = 0; i < TRIANGLES_CNT; i++) {
+            glBindVertexArray(vao_arr[i]);
+            glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices[i]) / sizeof(float) / 3);
+        }
+
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(TRIANGLES_CNT, vao_arr);
+    glDeleteBuffers(TRIANGLES_CNT, vbo_arr);
     glDeleteProgram(shader_program);
     glfwTerminate();
     return 0;

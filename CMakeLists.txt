@@ -29,23 +29,10 @@ FetchContent_MakeAvailable(glad)
 set(SOURCES
         src/01_Getting-started/Hello-Triangle/lesson.c
         src/01_Getting-started/Hello-Triangle/ex1.c
+        src/01_Getting-started/Hello-Triangle/ex2.c
+        src/01_Getting-started/Hello-Triangle/ex2b.c
 )
 
-#foreach(SOURCE ${SOURCES})
-#    get_filename_component(EXECUTABLE ${SOURCE} NAME_WE) # Extract base name of the source file
-#    get_filename_component(DIR ${SOURCE} DIRECTORY) # Get relative path of source file
-#    string(REPLACE "src/" "" REL_DIR ${DIR}) # Remove "src/" prefix
-#
-#    add_executable(${EXECUTABLE} ${SOURCE})
-#    target_link_libraries(${EXECUTABLE} PUBLIC glfw glad)
-#
-#    # Set the runtime output directory to mirror the source directory structure
-#    set_target_properties(${EXECUTABLE} PROPERTIES
-#            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${REL_DIR}"
-#    )
-#endforeach()
-
-# Loop over the sources
 foreach(SOURCE ${SOURCES})
     # Extract the relative path and executable name
     get_filename_component(RELATIVE_PATH ${SOURCE} DIRECTORY) # Get directory path of the source file

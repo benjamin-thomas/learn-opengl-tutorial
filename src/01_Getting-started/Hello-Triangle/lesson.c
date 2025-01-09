@@ -72,7 +72,7 @@ int main(void) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "Hello Triangle", NULL, NULL);
     if (!window) {
         printf("Could not create a GLFW window\n");
         glfwTerminate();
