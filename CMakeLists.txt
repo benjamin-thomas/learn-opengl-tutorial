@@ -31,6 +31,7 @@ set(SOURCES
         src/01_Getting-started/Hello-Triangle/ex1.c
         src/01_Getting-started/Hello-Triangle/ex2.c
         src/01_Getting-started/Hello-Triangle/ex2b.c
+        src/01_Getting-started/Hello-Triangle/ex3.c
 )
 
 foreach(SOURCE ${SOURCES})
