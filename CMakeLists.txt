@@ -29,7 +29,9 @@ set(SOURCES
         src/01_Getting-started/Hello-Triangle/ex2.c
         src/01_Getting-started/Hello-Triangle/ex2b.c
         src/01_Getting-started/Hello-Triangle/ex3.c
-        src/01_Getting-started/Shaders/lesson.c
+        src/01_Getting-started/Shaders/a/lesson.c
+        src/01_Getting-started/Shaders/b/lesson.c
+        src/01_Getting-started/Shaders/c/lesson.c
 )
 
 foreach (SOURCE ${SOURCES})

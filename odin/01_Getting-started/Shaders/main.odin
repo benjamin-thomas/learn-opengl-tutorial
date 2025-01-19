@@ -5,6 +5,7 @@ import "vendor:glfw"
 
 // This load macro is very handy!
 // I may have to load the shaders at runtime later to support hot-reloading
+// NOTE: there's a `load_shaders_file` function in helpers.odin
 VERT_SRC :: string(#load("triangle.vert"))
 FRAG_SRC :: string(#load("triangle.frag"))
 
