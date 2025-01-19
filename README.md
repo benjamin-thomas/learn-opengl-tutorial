@@ -28,3 +28,11 @@ sysctl -w vm.mmap_rnd_bits=28 # write (reduce from 32 on ubuntu 22.04)
 ```
 
 Source: https://stackoverflow.com/a/77994596
+
+---
+
+Find Odin examples at:
+
+- https://github.com/cshenton/learngl-odin
+
+Odin is nice, since it doesn't require any particular setup. We just need the compiler.

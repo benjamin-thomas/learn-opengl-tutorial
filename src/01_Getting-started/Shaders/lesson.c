@@ -16,7 +16,7 @@ enum failures {
     COMPILATION_FAILED = 4
 };
 
-int read_file_err(const char* path, char** source_out) {
+static int read_file_err(const char* path, char** source_out) {
     FILE* file = fopen(path, "r");
     if (!file) {
         printf("Could not open file: %s\n", path);
@@ -51,7 +51,7 @@ int read_file_err(const char* path, char** source_out) {
     return 0;
 }
 
-GLuint must_make_vertex_shader(const char* source) {
+static GLuint must_make_vertex_shader(const char* source) {
     const GLuint shader = glCreateShader(GL_VERTEX_SHADER);
     {
         glShaderSource(shader, 1, &source, NULL);
@@ -69,7 +69,7 @@ GLuint must_make_vertex_shader(const char* source) {
     return shader;
 }
 
-GLuint must_make_fragment_shader(const char* source) {
+static GLuint must_make_fragment_shader(const char* source) {
     const GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
     // Build the fragment shader
     {
@@ -89,7 +89,7 @@ GLuint must_make_fragment_shader(const char* source) {
 }
 
 // ReSharper disable once CppParameterMayBeConstPtrOrRef
-void on_window_resize(GLFWwindow* window, const int width, const int height) {
+static void on_window_resize(GLFWwindow* window, const int width, const int height) {
     (void)window;
     glViewport(0, 0, width, height);
 }
@@ -101,7 +101,7 @@ int modes[MODES_LEN] = {
 };
 int mode_idx = 0;
 
-void handle_key_press(GLFWwindow* window) {
+static void handle_key_press(GLFWwindow* window) {
     static int was_space_pressed = 0;
     const int is_space_pressed =
         glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
