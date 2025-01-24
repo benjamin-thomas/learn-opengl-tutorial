@@ -18,8 +18,9 @@ const char *fragment_shader_source =
         "  frag_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);"
         "}";
 
-// ReSharper disable once CppParameterNeverUsed
-void on_window_resize(GLFWwindow *_window, const int width, const int height) {
+// ReSharper disable once CppParameterMayBeConstPtrOrRef
+void on_window_resize(GLFWwindow *window, const int width, const int height) {
+    (void) window;
     glViewport(0, 0, width, height);
 }
 
@@ -67,12 +68,13 @@ int main(void) {
     longer need.
      */
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);        // Always on top
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "Hello Triangle", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "Two triangles", NULL, NULL);
     if (!window) {
         printf("Could not create a GLFW window\n");
         glfwTerminate();
@@ -89,6 +91,20 @@ int main(void) {
     }
     glViewport(0, 0, 800, 600);
 
+    // Display on the second monitor, if available.
+    {
+        int monitor_count;
+        GLFWmonitor **monitors = glfwGetMonitors(&monitor_count);
+        GLFWmonitor *target_monitor =
+                monitor_count >= 2 ? monitors[1] : monitors[0];
+        const GLFWvidmode *mode = glfwGetVideoMode(target_monitor);
+
+        // Position the window on the target monitor
+        int x_pos, y_pos;
+        glfwGetMonitorPos(target_monitor, &x_pos, &y_pos);
+        glfwSetWindowPos(window, x_pos + mode->width / 4,
+                         y_pos + mode->height / 4);
+    }
 
     // Vertex shader step 1: we create a shader object
     const unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
